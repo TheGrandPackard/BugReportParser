@@ -1,2 +1,2 @@
 # BugReportParser
-Android Bug Report Parser
+This ia an Android Bug Report Parser that I created because I have not found any well maintained parsers. Many were either lacking features or did not function. I will be maintaining this to keep up with the demand of parsing these files for useful information and new features will be added to enable faster diagnostic abilities and better correlation of events.
