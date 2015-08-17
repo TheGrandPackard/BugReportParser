@@ -7,8 +7,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 
 
@@ -18,6 +21,7 @@ public class BugReportParser {
 	TabPane pane;
 	
 	ArrayList<String> sectionHeaders;
+	ArrayList<String> syslogSections;
 	int sectionHeader = 0;
 	
 	public BugReportParser(TabPane pane, File bugReport)
@@ -57,8 +61,36 @@ public class BugReportParser {
 				// Look for start of new section
 				if(inputBuffer.startsWith("------ ") && inputBuffer.endsWith(" ------"))
 				{
-					Tab tab = new Tab(this.sectionHeaders.get(this.sectionHeader));
-					tab.setContent(new TextArea(outputBuffer));
+					String section = this.sectionHeaders.get(this.sectionHeader);
+					
+					Tab tab = new Tab(section);
+					
+					if(this.syslogSections.contains(section))
+					{
+						ArrayList<LogMessage> messages = new ArrayList<>();
+
+						String[] lines = outputBuffer.split("\r\n");
+						for (String line : lines) {
+							
+							if(!line.startsWith("------") && !line.startsWith("["))
+								messages.add(new LogMessage(line));							
+						}
+
+						ObservableList<LogMessage> observableMessages = FXCollections.observableList(messages);
+						TableView<LogMessage> table;
+						
+						if(section.equals("Kernel Log (dmesg)"))
+							table = LogTable.GetDmesgTable(observableMessages);
+						else
+							table = LogTable.GetSyslogTable(observableMessages);
+							
+						tab.setContent(table);
+					}
+					else
+					{
+						tab.setContent(new TextArea(outputBuffer));						
+					}
+					
 					pane.getTabs().add(tab);					
 
 					outputBuffer = inputBuffer;
@@ -91,6 +123,7 @@ public class BugReportParser {
 	private void generateSectionHeaders()
 	{
 		this.sectionHeaders = new ArrayList<>();
+		this.syslogSections = new ArrayList<>();
 
 		this.sectionHeaders.add("Summary");
 		this.sectionHeaders.add("Memory Info");
@@ -100,17 +133,17 @@ public class BugReportParser {
 		this.sectionHeaders.add("VMALLOC Info");
 		this.sectionHeaders.add("SLAB Info");
 		this.sectionHeaders.add("Zone Info");
-		this.sectionHeaders.add("System Log");
+		this.sectionHeaders.add("System Log");						this.syslogSections.add("System Log"); //standard syslog
 		this.sectionHeaders.add("VM Traces Just Now");
 		this.sectionHeaders.add("VM Traces at last ANR");
-		this.sectionHeaders.add("Event Log");
-		this.sectionHeaders.add("Radio Log");
+		this.sectionHeaders.add("Event Log");						this.syslogSections.add("Event Log"); //standard syslog
+		this.sectionHeaders.add("Radio Log");						this.syslogSections.add("Radio Log"); //standard syslog
 		this.sectionHeaders.add("Network Interfaces");
 		this.sectionHeaders.add("Network Routes");
 		this.sectionHeaders.add("ARP Cache");
 		this.sectionHeaders.add("Wifi Firmware Log");
 		this.sectionHeaders.add("System Properties");
-		this.sectionHeaders.add("Kernel Log (dmesg)");
+		this.sectionHeaders.add("Kernel Log (dmesg)");				this.syslogSections.add("Kernel Log (dmesg)"); //dmesg syslog
 		this.sectionHeaders.add("Kernel Wakelocks");
 		this.sectionHeaders.add("Kernel CPUFREQ");
 		this.sectionHeaders.add("VOLD Dump");
