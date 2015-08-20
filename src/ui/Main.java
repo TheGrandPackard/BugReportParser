@@ -60,6 +60,7 @@ public class Main extends Application implements EventHandler<WindowEvent>{
 				
 				if(file != null)
 				{
+					tabPane.getTabs().clear();
 					parser = new BugReportParser(tabPane, file);
 				}
 				else

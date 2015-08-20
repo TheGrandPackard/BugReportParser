@@ -12,7 +12,7 @@ public class LogMessage
 	
 	public LogMessage(String log)
 	{
-		if(log.startsWith("<")) // Kernel Log (dmesg)
+		if(log.startsWith("<")) // KERNEL LOG (dmesg)
 		{
 			this.severity = new SimpleStringProperty(getSeverityFromInteger(Integer.valueOf(log.substring(1,2))));
 			this.date = new SimpleStringProperty(log.substring(log.indexOf("[")+1, log.indexOf("]")));
@@ -22,13 +22,13 @@ public class LogMessage
 			this.pid = new SimpleStringProperty("");
 			
 		}
-		else // System, Event, Radio Log
+		else // SYSTEM LOG, EVENT LOG, RADIO LOG
 		{
 			this.date = new SimpleStringProperty(log.substring(0,18));
-			this.severity = new SimpleStringProperty(getSeverityFromString(log.substring(19,20)));
-			this.process = new SimpleStringProperty(log.substring(21,log.indexOf('(')));
-			this.pid = new SimpleStringProperty(log.substring(log.indexOf('(')+1,log.indexOf(')')));
-			this.message = new SimpleStringProperty(log.substring(log.indexOf("):")+2));
+			this.pid = new SimpleStringProperty(log.substring(19,31));
+			this.severity = new SimpleStringProperty(getSeverityFromString(log.substring(31,32)));
+			this.process = new SimpleStringProperty(log.substring(35,log.indexOf(":",34)));
+			this.message = new SimpleStringProperty(log.substring(log.indexOf(":",34)+2));
 		}
 	}
 	
