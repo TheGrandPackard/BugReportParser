@@ -12,8 +12,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 
 
 public class BugReportParser {
@@ -84,7 +84,7 @@ public class BugReportParser {
 							}
 	
 							ObservableList<LogMessage> observableMessages = FXCollections.observableList(messages);
-							TableView<LogMessage> table;
+							VBox table;
 							
 							if(section.equals("KERNEL LOG (dmesg)"))
 								table = LogTable.GetDmesgTable(observableMessages);
