@@ -70,7 +70,7 @@ public class BugReportParser {
 						{
 							ArrayList<LogMessage> messages = new ArrayList<>();
 	
-							Pattern kernelLog = Pattern.compile("<\\d>\\[\\d*\\.\\d*@\\d\\] .*");
+							Pattern kernelLog = Pattern.compile("<\\d>\\[.*] .*");
 							Pattern systemLog = Pattern.compile("\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d\\d\\d\\s*\\d*\\s*\\d* [A-Z] .*");
 							
 							String[] lines = outputBuffer.split("\r\n");

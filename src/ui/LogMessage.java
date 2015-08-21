@@ -27,7 +27,7 @@ public class LogMessage
 			this.date = new SimpleStringProperty(log.substring(0,18));
 			this.pid = new SimpleStringProperty(log.substring(19,31));
 			this.severity = new SimpleStringProperty(getSeverityFromString(log.substring(31,32)));
-			this.process = new SimpleStringProperty(log.substring(35,log.indexOf(":",34)));
+			this.process = new SimpleStringProperty(log.substring(33,log.indexOf(":",34)));
 			this.message = new SimpleStringProperty(log.substring(log.indexOf(":",34)+2));
 		}
 	}
@@ -92,17 +92,17 @@ public class LogMessage
 		switch(i)
 		{
 			case "F":
-				return "FATAL";
+				return "Fatal";
 			case "E":
-				return "ERROR";
+				return "Error";
 			case "W":
-				return "WARNING";
+				return "Warning";
 			case "I":
-				return "INFO";
+				return "Informational";
 			case "D":
-				return "DEBUG";
+				return "Debugging";
 			case "V":
-				return "VERBOSE";
+				return "Verbose";
 			default:
 				return "";
 		}
